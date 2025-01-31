@@ -1,0 +1,76 @@
+.marketContainer {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: white;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+label {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.job-results {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+    align-items: center;
+    max-width: 800px;
+    min-width: 800px;
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 15px;
+    position: relative;
+    width: 100%;
+}
+
+.loader {
+    text-align: center;
+    font-size: 1.1rem;
+    color: white;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.desc {
+    font-size: 15px;
+}
+
+.marketButton {
+    width: 130px;
+    padding: 7px;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.loader {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: white;
+}
+
+.spinner {
+    border: 2px solid #FFD700;
+    border-top: 2px solid black;
+    border-radius: 50%;
+    width: 23px;
+    height: 23px;
+    margin-right: 8px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

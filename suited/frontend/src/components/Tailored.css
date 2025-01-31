@@ -1,0 +1,29 @@
+.custom-theme {
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+}
+
+:root {
+  --background: 219 65% 12%;
+  --foreground: 0 0% 100%;
+  --card: 219 45% 20%;
+  --card-foreground: 0 0% 100%;
+  --muted: 219 45% 25%;
+  --muted-foreground: 0 0% 100%;
+  --border: 219 45% 30%;
+  --accent: 51 100% 50%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
