@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import { anonymizeResume } from "./services/openaiJson.js";
 import { User, Briefcase, GraduationCap, Award } from "lucide-react";
+import downloadPDF from "./downloadPDF";
 
 export default function ResumeTransformDemo({ resume }) {
   const [activeTab, setActiveTab] = useState("original");
@@ -64,6 +65,10 @@ export default function ResumeTransformDemo({ resume }) {
     fetchFormattedResume();
   }, [activeTab, resume]);
 
+  const handleDownloadPDF = () => {
+    downloadPDF(formattedResume, activeTab); // Pass formattedResume and activeTab to downloadPDF
+  };
+
   return (
     <Card className="w-full max-w-4xl bg-secondary shadow-custom">
       <CardHeader>
@@ -89,7 +94,11 @@ export default function ResumeTransformDemo({ resume }) {
           )}
 
           {!loading && formattedResume && activeTab == "original" && (
-            <TabsContent value="original">
+            <TabsContent
+              value="original"
+              data-state="original"
+              id="resume-original"
+            >
               <div className="p-6 space-y-6 border border-border/20 rounded-lg bg-card/50">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-4">
@@ -183,12 +192,27 @@ export default function ResumeTransformDemo({ resume }) {
                       </p>
                     )}
                   </div>
+                  <div className="mt-6 flex justify-end space-x-4">
+                    <button
+                      onClick={handleDownloadPDF} // Trigger PDF download with formatted data
+                      className="px-4 py-2 text-white bg-blue-500 rounded-lg"
+                    >
+                      Download{" "}
+                      {activeTab === "original"
+                        ? "Traditional Resume"
+                        : "Anonymized Profile"}
+                    </button>
+                  </div>
                 </div>
               </div>
             </TabsContent>
           )}
           {!loading && formattedResume && activeTab == "transformed" && (
-            <TabsContent value="transformed">
+            <TabsContent
+              value="transformed"
+              data-state="transformed"
+              id="resume-transformed"
+            >
               <div className="p-6 space-y-6 border border-border/20 rounded-lg bg-card/50">
                 <p className="text-sm text-foreground/80 bg-primary/50 p-2 rounded">
                   This is the anonymized profile view. Personal information and
@@ -325,8 +349,14 @@ export default function ResumeTransformDemo({ resume }) {
                     </p>
                   </div>
                   <div className="mt-6 flex justify-end space-x-4">
-                    <button className="px-4 py-2 text-white bg-blue-500 rounded-lg">
-                      Download Anonymized Profile
+                    <button
+                      onClick={handleDownloadPDF} // Trigger PDF download with formatted data
+                      className="px-4 py-2 text-white bg-blue-500 rounded-lg"
+                    >
+                      Download{" "}
+                      {activeTab === "original"
+                        ? "Traditional Resume"
+                        : "Anonymized Profile"}
                     </button>
                     <button className="px-4 py-2 text-blue-500 border rounded-lg">
                       Learn About Bias Reduction

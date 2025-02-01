@@ -4,8 +4,9 @@ import { Upload } from 'lucide-react';
 import mammoth from 'mammoth';
 import * as pdfjsLib from 'pdfjs-dist';
 
-// Set the workerSrc globally for pdfjsLib
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js`;
+// Set the correct worker source dynamically
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString();
+
 
 export default function UploadResume({ onUploadComplete }) {
   const [isDragging, setIsDragging] = useState(false);
@@ -98,7 +99,7 @@ export default function UploadResume({ onUploadComplete }) {
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
         >
-          <Upload className="w-12 h-12 text-accent mx-auto mb-4" />
+          <Upload className="w-12 h-12 text-accent mx-auto mb-4 cursor-pointer" />
           <p className="text-foreground/80">
             {isDragging ? 'Drop your file here' : 'Drag and drop your resume here, or click to browse'}
           </p>
