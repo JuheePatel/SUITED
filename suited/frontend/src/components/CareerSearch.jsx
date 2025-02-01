@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./CareerSearch.css";
+import { fetchData, postData } from "../api";
 
-const API_URL = "http://localhost:8000/api/career_search.php";
 const CareerSearch = () => {
   const styles = {
     root: {
@@ -125,36 +125,11 @@ const CareerSearch = () => {
 
   const resultsPerPage = 5;
 
-  const fetchWithTimeout = async (resource, options = {}) => {
-    const timeout = options.timeout || 8000;
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeout);
-
-    try {
-      const response = await fetch(resource, {
-        ...options,
-        signal: controller.signal,
-      });
-      clearTimeout(id);
-      return response;
-    } catch (error) {
-      clearTimeout(id);
-      if (error.name === "AbortError") {
-        throw new Error("Request timed out");
-      }
-      throw error;
-    }
-  };
-
   useEffect(() => {
     const loadIndustries = async () => {
       try {
         setLoading(true);
-        const response = await fetchWithTimeout(
-          `${API_URL}?param=industriesList`
-        );
-        if (!response.ok) throw new Error("Failed to fetch industries");
-        const data = await response.json();
+        const data = await fetchData('/career_search.php?param=industriesList'); // pass the full endpoint or query
         setIndustries(data.industry);
       } catch (err) {
         setError(err.message);
@@ -174,11 +149,7 @@ const CareerSearch = () => {
     setError(null);
 
     try {
-      const response = await fetchWithTimeout(
-        `${API_URL}?param=Keyword&keyword=${encodeURIComponent(keyword)}`
-      );
-      if (!response.ok) throw new Error("Failed to fetch keyword results");
-      const data = await response.json();
+      const data = await postData(`career_search.php?param=Keyword&keyword=${encodeURIComponent(keyword)}`);
       setKeywordResults(data.career);
     } catch (err) {
       setError(err.message);
@@ -195,11 +166,7 @@ const CareerSearch = () => {
     setError(null);
 
     try {
-      const response = await fetchWithTimeout(
-        `${API_URL}?param=industries&code=${encodeURIComponent(industryCode)}`
-      );
-      if (!response.ok) throw new Error("Failed to fetch industry results");
-      const data = await response.json();
+      const data = await postData(`career_search.php?param=industries&code=${encodeURIComponent(industryCode)}`);
       setIndustryResults(data.career);
     } catch (err) {
       setError(err.message);
@@ -217,11 +184,7 @@ const CareerSearch = () => {
     setError(null);
 
     try {
-      const response = await fetchWithTimeout(
-        `${API_URL}?param=military&keyword=${encodeURIComponent(moc)}`
-      );
-      if (!response.ok) throw new Error("Failed to fetch military results");
-      const data = await response.json();
+      const data = await fetchData(`career_search.php?param=military&keyword=${encodeURIComponent(moc)}`);
 
       let filteredCareers = data.career;
       if (branch !== "all") {
@@ -387,6 +350,7 @@ const CareerSearch = () => {
           </form>
         </section>
       </div>
+      {error && <div className="error" style={{ color: "red", textAlign: "center", marginTop: "-5px" }}>Failed to search career. Please try again.</div>}
 
       {/* Clear All Button */}
       <div className="clear-all-btn-container">
@@ -521,7 +485,6 @@ const CareerSearch = () => {
           <div className="spinner"></div>Loading
         </div>
       )}
-      {error && <div className="error">{error}</div>}
     </div>
   );
 };

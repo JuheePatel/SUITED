@@ -1,6 +1,12 @@
 <?php
 require_once __DIR__ . "/../config.php"; // Load configuration
 
+// Handle preflight request
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);  // Respond to the preflight OPTIONS request
+    exit;
+}
+
 // Authentication credentials for O*NET API
 $username = $_ENV["username"];
 $password = $_ENV["password"];

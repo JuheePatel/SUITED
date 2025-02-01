@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SkillAssessmentResult from "./SkillAssessmentResult";
-import { postData } from "../api";
+import { fetchData, postData } from "../api";
 
 const SkillAssessment = () => {
   const styles = {
@@ -129,10 +129,7 @@ const SkillAssessment = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8000/api/fetch_skills.php"
-        );
-        const data = await response.json();
+        const data = await fetchData("fetch_skills.php");
 
         if (data.Skills && Array.isArray(data.Skills)) {
           const formattedQuestions = data.Skills.map((skill) => ({
@@ -140,24 +137,16 @@ const SkillAssessment = () => {
             ElementName: skill.ElementName,
             question: skill.Question,
             options: [
-              {
-                text: skill.AnchorFirst || "Beginner",
-                value: skill.DataPoint20,
-              },
+              { text: skill.AnchorFirst || "Beginner", value: skill.DataPoint20 },
               { text: skill.AnchorSecond || "Basic", value: skill.DataPoint35 },
-              {
-                text: skill.AnchorThird || "Skilled",
-                value: skill.DataPoint50,
-              },
-              {
-                text: skill.AnchorFourth || "Advanced",
-                value: skill.DataPoint65,
-              },
+              { text: skill.AnchorThird || "Skilled", value: skill.DataPoint50 },
+              { text: skill.AnchorFourth || "Advanced", value: skill.DataPoint65 },
               { text: skill.AnchorLast || "Expert", value: skill.DataPoint80 },
             ],
           }));
           setQuestions(formattedQuestions);
           setAnswers(Array(formattedQuestions.length).fill(null));
+          setError("")
         } else {
           throw new Error("Invalid data format from the API.");
         }
@@ -302,7 +291,7 @@ const SkillAssessment = () => {
       >
         Select your skill level for each category
       </p>
-      {questions.length === 0 && (
+      {questions.length === 0 && error == "" && (
         <div
           style={{
             marginTop: "20px",

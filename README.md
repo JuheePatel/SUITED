@@ -95,4 +95,4 @@ This will run the backend on http://localhost:8000.
  npm run dev
  ```
 
-This will run the frontend on http://localhost:3000.
+This will run the frontend on http://localhost:5173.
